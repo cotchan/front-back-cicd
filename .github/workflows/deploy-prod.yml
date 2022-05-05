@@ -1,7 +1,7 @@
-name: remote ssh command for deploy # Deploy to EC2
+name: remote ssh command for deploy production
 on:
   push:
-    branches: [sandbox]
+    branches: [production]
 jobs:
   build:
     name: Build
@@ -13,7 +13,7 @@ jobs:
       - name: create env file # 2. 깃헙 settings > secrets 에 올려놓은 비밀 값을 복사해 .env 파일로 생성
         run: |
           touch .env
-          echo "${{ secrets.ENV_VARS }}" >> .env
+          echo "${{ secrets.ENV_PROD_VARS }}" >> .env
 
       - name: create remote directory # 3. 서버에 접속해 리모트 디렉토리 생성
         uses: appleboy/ssh-action@master
@@ -41,4 +41,4 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            sh /home/ubuntu/srv/ubuntu/scripts/deploy.sh
+            sh /home/ubuntu/srv/ubuntu/scripts/deploy-prod.sh

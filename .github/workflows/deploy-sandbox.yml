@@ -1,0 +1,44 @@
+name: remote ssh command for deploy # Deploy to EC2
+on:
+  push:
+    branches: [sandbox]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout # 1.  브랜치로 checkout
+        uses: actions/checkout@master
+
+      - name: create env file # 2. 깃헙 settings > secrets 에 올려놓은 비밀 값을 복사해 .env 파일로 생성
+        run: |
+          touch .env
+          echo "${{ secrets.ENV_SANDBOX_VARS }}" >> .env
+
+      - name: create remote directory # 3. 서버에 접속해 리모트 디렉토리 생성
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: mkdir -p /home/ubuntu/srv/ubuntu
+
+      - name: copy source via ssh key # 4. ssh key로 현재 푸시된 소스를 서버에 복사 (rsync로 github runners와 ec2 동기화)
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          remote_path: /home/ubuntu/srv/ubuntu/
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.KEY }}
+
+      - name: executing remote ssh commands # 5. 서버로 접속해 deploy.sh 파일 실행
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            sh /home/ubuntu/srv/ubuntu/scripts/deploy-sandbox.sh
