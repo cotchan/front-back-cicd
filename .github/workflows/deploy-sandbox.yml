@@ -41,4 +41,4 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            sh /home/ubuntu/srv/ubuntu/scripts/deploy.sh
+            sh /home/ubuntu/srv/ubuntu/scripts/deploy-sandbox.sh
