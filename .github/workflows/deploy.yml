@@ -12,8 +12,8 @@ jobs:
 
       - name: create env file # 2. 깃헙 settings > secrets 에 올려놓은 비밀 값을 복사해 .env 파일로 생성
         run: |
-          touch .env-var
-          echo "${{ secrets.ENV_VARS }}" >> .env-var
+          touch .env
+          echo "${{ secrets.ENV_VARS }}" >> .env
 
       - name: create remote directory # 3. 서버에 접속해 리모트 디렉토리 생성
         uses: appleboy/ssh-action@master
