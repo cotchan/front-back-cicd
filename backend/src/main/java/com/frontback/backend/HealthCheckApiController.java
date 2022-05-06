@@ -28,6 +28,6 @@ public class HealthCheckApiController {
 
     @GetMapping("/v3")
     public String getSystemTimeMilli_v3() {
-        return String.format("currentTimeMillis: %d", System.currentTimeMillis());
+        return String.format("[V3 api] currentTimeMillis: %d", System.currentTimeMillis());
     }
 }
