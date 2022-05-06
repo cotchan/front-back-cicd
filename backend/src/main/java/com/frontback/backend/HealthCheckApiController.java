@@ -25,4 +25,9 @@ public class HealthCheckApiController {
     public String getSystemTimeMilli_v2() {
         return String.format("my-custom-value: %s, %d", customConfig.toString(), System.currentTimeMillis());
     }
+
+    @GetMapping("/v3")
+    public String getSystemTimeMilli_v3() {
+        return String.format("[V3 api] currentTimeMillis: %d", System.currentTimeMillis());
+    }
 }
