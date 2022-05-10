@@ -1,4 +1,4 @@
-name: remote ssh command for deploy # Deploy to EC2
+name: remote ssh command for deploy sandbox
 on:
   push:
     branches: [sandbox]
@@ -22,13 +22,13 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          script: mkdir -p /home/ubuntu/srv/ubuntu
+          script: mkdir -p /home/ubuntu
 
       - name: copy source via ssh key # 4. ssh key로 현재 푸시된 소스를 서버에 복사 (rsync로 github runners와 ec2 동기화)
         uses: burnett01/rsync-deployments@4.1
         with:
-          switches: -avzr --delete
-          remote_path: /home/ubuntu/srv/ubuntu/
+          switches: -avzr --delete --exclude 'certbot'
+          remote_path: /home/ubuntu
           remote_host: ${{ secrets.HOST }}
           remote_user: ${{ secrets.USERNAME }}
           remote_key: ${{ secrets.KEY }}
@@ -41,4 +41,4 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            sh /home/ubuntu/srv/ubuntu/scripts/deploy-sandbox.sh
+            sh /home/ubuntu/scripts/deploy-sandbox.sh

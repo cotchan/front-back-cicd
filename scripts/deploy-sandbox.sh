@@ -24,7 +24,7 @@ then
 fi
 
 echo "start docker-compose down: ubuntu"
-sudo docker-compose -f /home/ubuntu/srv/ubuntu/docker-compose-sandbox.yml down
+sudo docker-compose -f /home/ubuntu/docker-compose-sandbox.yml down
 
 echo "start docker-compose up: ubuntu"
-sudo docker-compose -f /home/ubuntu/srv/ubuntu/docker-compose-sandbox.yml up --build -d
+sudo docker-compose -f /home/ubuntu/docker-compose-sandbox.yml up --build -d
