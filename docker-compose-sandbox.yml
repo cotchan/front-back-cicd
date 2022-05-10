@@ -12,14 +12,6 @@ services:
       - ./frontend:/app
     # 리액트 애플리케이션에서 발생하는 버그 해결
     stdin_open: true
-  nginx:
-    container_name: app_nginx
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-      - "80:80"
   backend:
     container_name: app_backend
     build:
@@ -33,4 +25,23 @@ services:
 #      SPRING_DATASOURCE_USERNAME:
 #      SPRING_DATASOURCE_PASSWORD:
 #      SPRING_PROFILES_ACTIVE:
-
+  nginx:
+    container_name: app_nginx
+    restart: always
+    volumes:
+      - ./certbot/data/certbot/conf:/etc/letsencrypt
+      - ./certbot/data/certbot/www:/var/www/certbot
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./certbot/data/certbot/conf:/etc/letsencrypt
+      - ./certbot/data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
