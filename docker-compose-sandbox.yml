@@ -1,17 +1,17 @@
 version: "3"
 
 services:
-  frontend:
-    container_name: app_frontend
-    build:
-      dockerfile: Dockerfile
-      context: ./frontend
-    # 볼륨을 설정합니다.
-    volumes:
-      - /app/node_modules
-      - ./frontend:/app
-    # 리액트 애플리케이션에서 발생하는 버그 해결
-    stdin_open: true
+#  frontend:
+#    container_name: app_frontend
+#    build:
+#      dockerfile: Dockerfile
+#      context: ./frontend
+#    # 볼륨을 설정합니다.
+#    volumes:
+#      - /app/node_modules
+#      - ./frontend:/app
+#    # 리액트 애플리케이션에서 발생하는 버그 해결
+#    stdin_open: true
   backend:
     container_name: app_backend
     build:
